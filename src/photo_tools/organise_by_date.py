@@ -1,4 +1,7 @@
 from pathlib import Path
+import logging
+
+logger = logging.getLogger(__name__)
 
 IMAGE_EXTENSIONS = {
     ".jpg", 
@@ -24,7 +27,7 @@ def organise_by_date(input_dir: str, output_dir: str) -> None:
             continue
 
         if file_path.suffix.lower() not in IMAGE_EXTENSIONS:
-            print(f"Skipping (not an image): {file_path.name}")
+            logger.debug(f"Skipping (not an image): {file_path.name}")
             continue
 
         # TODO: EXIF date extraction

@@ -1,7 +1,10 @@
 import typer
 from photo_tools.organise_by_date import organise_by_date
+from photo_tools.logging_config import setup_logging
 
 app = typer.Typer()
+
+setup_logging()
 
 
 @app.command("organise-by-date")
