@@ -1,5 +1,6 @@
 from pathlib import Path
 import logging
+from photo_tools.image.metadata import get_image_date
 
 logger = logging.getLogger(__name__)
 
@@ -29,6 +30,10 @@ def organise_by_date(input_dir: str, output_dir: str) -> None:
         if file_path.suffix.lower() not in IMAGE_EXTENSIONS:
             logger.debug(f"Skipping (not an image): {file_path.name}")
             continue
+        try:
+            date = get_image_date(file_path)
+            print(f"{file_path.name} → {date}")
+        except Exception as e:
+            logger.debug(f"Skipping {file_path.name}: {e}")
 
-        # TODO: EXIF date extraction
-        print(f"Processing image: {file_path.name}")
+        # TODO: support RAW files
