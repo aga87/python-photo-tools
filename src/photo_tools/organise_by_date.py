@@ -12,7 +12,7 @@ IMAGE_EXTENSIONS = {
 }
 
 
-def organise_by_date(input_dir: str, output_dir: str) -> None:
+def organise_by_date(input_dir: str, output_dir: str, suffix: str | None = None) -> None:
     input_path = Path(input_dir)
     output_path = Path(output_dir)
 
@@ -35,8 +35,14 @@ def organise_by_date(input_dir: str, output_dir: str) -> None:
         try:
             date = get_image_date(file_path)
 
-            # 1. Build folder: YYYY-MM-DD
+            # 1. Build folder: YYYY-MM-DD suffix
             folder_name = date.strftime("%Y-%m-%d")
+
+            if suffix:
+                cleaned_suffix = suffix.strip()
+                if cleaned_suffix:
+                    folder_name = f"{folder_name} {cleaned_suffix}"
+
             target_dir = output_path / folder_name
 
             # 2. Ensure directory exists

@@ -12,8 +12,12 @@ setup_logging()
 
 
 @app.command("organise-by-date")
-def organise_by_date_cmd(input: str, output: str) -> None:
-    organise_by_date(input, output)
+def organise_by_date_cmd(
+    input: str,
+    output: str,
+    suffix: str = typer.Option(None, help="Optional folder suffix (e.g. 'Amsterdam')")
+) -> None:
+    organise_by_date(input, output, suffix)
 
 
 if __name__ == "__main__":
