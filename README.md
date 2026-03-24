@@ -88,6 +88,21 @@ photo-tools soft-delete-unpaired-raws <RAW_DIR> <JPG_DIR>
 photo-tools soft-delete-unpaired-raws <RAW_DIR> <JPG_DIR> --dry-run
 ```
 
+#### optimise
+
+- Resize images to a maximum width of `2500px`
+- Choose the highest quality that results in a file size ≤ `500 KB` (never below `70%`)
+- Saves optimised images with prefix `lq_` in the same directory (existing files are overwritten)
+- Supports a dry-run mode to preview changes without modifying the filesystem
+
+
+```shell
+photo-tools optimise <INPUT_DIR>
+```
+
+```shell
+photo-tools optimise <INPUT_DIR> --dry-run
+```
 
 ## Local Testing Setup
 
