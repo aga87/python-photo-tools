@@ -1,14 +1,16 @@
 from pathlib import Path
 import logging
+import shutil
 from photo_tools.image.metadata import get_image_date
 
 logger = logging.getLogger(__name__)
 
 IMAGE_EXTENSIONS = {
-    ".jpg", 
+    ".jpg",
     ".jpeg",
-    ".raf", # Fujifilm RAW
+    ".raf",
 }
+
 
 def organise_by_date(input_dir: str, output_dir: str) -> None:
     input_path = Path(input_dir)
@@ -20,7 +22,6 @@ def organise_by_date(input_dir: str, output_dir: str) -> None:
     if not input_path.is_dir():
         raise NotADirectoryError(f"Input path is not a directory: {input_path}")
 
-    # Ensure intermediate output directory exists (for year/month structure)
     output_path.mkdir(parents=True, exist_ok=True)
 
     for file_path in input_path.iterdir():
@@ -30,9 +31,27 @@ def organise_by_date(input_dir: str, output_dir: str) -> None:
         if file_path.suffix.lower() not in IMAGE_EXTENSIONS:
             logger.debug(f"Skipping (not an image): {file_path.name}")
             continue
+
         try:
             date = get_image_date(file_path)
-            print(f"{file_path.name} → {date}")
+
+            # 1. Build folder: YYYY-MM-DD
+            folder_name = date.strftime("%Y-%m-%d")
+            target_dir = output_path / folder_name
+
+            # 2. Ensure directory exists
+            target_dir.mkdir(parents=True, exist_ok=True)
+
+            # 3. Copy file
+            target_file = target_dir / file_path.name
+
+            if target_file.exists():
+                logger.info(f"Skipping (already exists): {target_file.name}")
+                continue
+
+            shutil.copy2(file_path, target_file)
+
+            logger.info(f"Copied {file_path.name} → {target_dir}")
+
         except Exception as e:
             logger.debug(f"Skipping {file_path.name}: {e}")
-
