@@ -48,16 +48,16 @@ def organise_by_date(input_dir: str, output_dir: str, suffix: str | None = None)
             # 2. Ensure directory exists
             target_dir.mkdir(parents=True, exist_ok=True)
 
-            # 3. Copy file
+            # 3. Move file
             target_file = target_dir / file_path.name
 
             if target_file.exists():
                 logger.info(f"Skipping (already exists): {target_file.name}")
                 continue
 
-            shutil.copy2(file_path, target_file)
+            shutil.move(str(file_path), str(target_file))
 
-            logger.info(f"Copied {file_path.name} → {target_dir}")
+            logger.info(f"Moved {file_path.name} → {target_dir}")
 
         except Exception as e:
             logger.debug(f"Skipping {file_path.name}: {e}")
