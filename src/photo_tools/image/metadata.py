@@ -1,29 +1,35 @@
 from pathlib import Path
+import subprocess
+import json
+import shutil
 from datetime import datetime
-from PIL import Image, ExifTags
 
 
 def get_exif_metadata(file_path: Path) -> dict:
-    with Image.open(file_path) as img:
-        exif = img._getexif()
+    if not shutil.which("exiftool"):
+        raise RuntimeError("exiftool is required but not installed")
 
-        if not exif:
-            raise ValueError("No EXIF data")
+    result = subprocess.run(
+        ["exiftool", "-json", str(file_path)],
+        capture_output=True,
+        text=True,
+        check=True,
+    )
 
-        return {
-            ExifTags.TAGS.get(tag): value
-            for tag, value in exif.items()
-        }
+    data = json.loads(result.stdout)
+
+    if not data or not data[0]:
+        raise ValueError("No EXIF data")
+
+    return data[0]
 
 
 def get_image_date(file_path: Path) -> datetime:
     exif_data = get_exif_metadata(file_path)
 
-    date_str = exif_data.get("DateTimeOriginal")
+    for key in ["DateTimeOriginal", "CreateDate", "ModifyDate"]:
+        value = exif_data.get(key)
+        if value:
+            return datetime.strptime(value, "%Y:%m:%d %H:%M:%S")
 
-    if not date_str:
-        raise ValueError("No DateTimeOriginal")
-
-    date_str = date_str.strip(" \x00")
-
-    return datetime.strptime(date_str, "%Y:%m:%d %H:%M:%S")
+    raise ValueError("No usable date field found")

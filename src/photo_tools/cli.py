@@ -1,6 +1,10 @@
 import typer
 from photo_tools.organise_by_date import organise_by_date
 from photo_tools.logging_config import setup_logging
+import shutil
+
+if not shutil.which("exiftool"):
+    raise RuntimeError("exiftool is required but not installed")
 
 app = typer.Typer()
 

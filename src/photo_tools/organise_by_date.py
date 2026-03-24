@@ -36,4 +36,3 @@ def organise_by_date(input_dir: str, output_dir: str) -> None:
         except Exception as e:
             logger.debug(f"Skipping {file_path.name}: {e}")
 
-        # TODO: support RAW files
