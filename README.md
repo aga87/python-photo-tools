@@ -38,12 +38,27 @@ RUN apt-get update && apt-get install -y exiftool
 List available commands:
 
 ```bash
-python -m photo_tools.cli --help
+photo-tools --help
 ```
+
+### Commands
+
+#### organise-by-date
+
+Organise images into date-based folders (`YYYY-MM-DD`, optional suffix).
+
+Files are moved (not copied) into the output directory.
+
+```shell
+photo-tools organise-by-date <INPUT_DIR> <OUTPUT_DIR>
+
+photo-tools organise-by-date <INPUT_DIR> <OUTPUT_DIR> --suffix <SUFFIX>
+```
+
 
 ## Local Testing Setup
 
-You can pass any input and output paths to the CLI.
+### Data 
 
 For convenience during development, you can create a local structure:
 
@@ -55,4 +70,18 @@ Place test photos in:
 
 ```
 data/input/
+```
+
+### Running the CLI
+
+You can run the CLI module directly for testing:
+
+```shell
+python -m photo_tools.cli ./data/input ./data/output
+```
+
+If the CLI uses subcommands, the command will look like:
+
+```shell
+python -m photo_tools.cli organise-by-date ./data/input ./data/output
 ```
