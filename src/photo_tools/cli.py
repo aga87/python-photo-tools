@@ -10,14 +10,18 @@ app = typer.Typer()
 
 setup_logging()
 
-
 @app.command("organise-by-date")
 def organise_by_date_cmd(
     input: str,
     output: str,
-    suffix: str = typer.Option(None, help="Optional folder suffix (e.g. 'Amsterdam')")
+    suffix: str | None = typer.Option(None),
+    dry_run: bool = typer.Option(
+        False,
+        "--dry-run",
+        help="Preview changes without moving files",
+    ),
 ) -> None:
-    organise_by_date(input, output, suffix)
+    organise_by_date(input, output, suffix, dry_run)
 
 
 if __name__ == "__main__":
