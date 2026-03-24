@@ -60,6 +60,19 @@ photo-tools organise-by-date <INPUT_DIR> <OUTPUT_DIR> --suffix <SUFFIX>
 photo-tools organise-by-date <INPUT_DIR> <OUTPUT_DIR> --dry-run
 ```
 
+#### organise-by-type
+
+- Organise images into `raws/` and `jpgs/` subfolders within the input directory
+- Files are moved (not copied) in place
+- Supports a dry-run mode to preview changes without modifying the filesystem
+
+```shell
+photo-tools organise-by-type <INPUT_DIR>
+```
+```shell
+photo-tools organise-by-type <INPUT_DIR> --dry-run
+```
+
 
 ## Local Testing Setup
 
