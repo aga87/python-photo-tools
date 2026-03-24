@@ -45,14 +45,19 @@ photo-tools --help
 
 #### organise-by-date
 
-Organise images into date-based folders (`YYYY-MM-DD`, optional suffix).
+- Organise images into date-based folders (`YYYY-MM-DD`, optional suffix).
+- Files are moved (not copied) into the output directory.
+- Supports a dry-run mode to preview changes without modifying the filesystem.
 
-Files are moved (not copied) into the output directory.
 
 ```shell
 photo-tools organise-by-date <INPUT_DIR> <OUTPUT_DIR>
-
+```
+```shell
 photo-tools organise-by-date <INPUT_DIR> <OUTPUT_DIR> --suffix <SUFFIX>
+```
+```shell
+photo-tools organise-by-date <INPUT_DIR> <OUTPUT_DIR> --dry-run
 ```
 
 
