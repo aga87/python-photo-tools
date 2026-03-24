@@ -73,6 +73,21 @@ photo-tools organise-by-type <INPUT_DIR>
 photo-tools organise-by-type <INPUT_DIR> --dry-run
 ```
 
+#### soft-delete-unpaired-raws
+
+- Move RAW files to `raws-to-delete/` if no matching JPG (same prefix) exists
+- Matching is based on filename prefix (e.g. `abcd.RAF` matches `abcd_edit.jpg`)
+- Files are moved (not deleted), making the operation reversible
+- Supports a dry-run mode to preview changes without modifying the filesystem
+
+```shell
+photo-tools soft-delete-unpaired-raws <RAW_DIR> <JPG_DIR>
+```
+
+```shell
+photo-tools soft-delete-unpaired-raws <RAW_DIR> <JPG_DIR> --dry-run
+```
+
 
 ## Local Testing Setup
 
