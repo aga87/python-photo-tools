@@ -88,3 +88,33 @@ def test_skips_files_with_missing_date_metadata(tmp_path, monkeypatch):
 
     assert image_file.exists()
     assert not any(output_dir.rglob("*"))
+
+
+def test_moves_files_into_separate_date_folders(tmp_path, monkeypatch):
+    input_dir = tmp_path / "input"
+    output_dir = tmp_path / "output"
+    input_dir.mkdir()
+    output_dir.mkdir()
+
+    first_file = input_dir / "first.jpg"
+    second_file = input_dir / "second.jpg"
+
+    first_file.write_text("fake image content")
+    second_file.write_text("fake image content")
+
+    dates = {
+        "first.jpg": datetime(2024, 5, 17),
+        "second.jpg": datetime(2024, 5, 18),
+    }
+
+    monkeypatch.setattr(
+        "photo_tools.organise_by_date.get_image_date",
+        lambda file_path: dates[file_path.name],
+    )
+
+    organise_by_date(str(input_dir), str(output_dir), dry_run=False)
+
+    assert (output_dir / "2024-05-17" / "first.jpg").exists()
+    assert (output_dir / "2024-05-18" / "second.jpg").exists()
+    assert not first_file.exists()
+    assert not second_file.exists()
