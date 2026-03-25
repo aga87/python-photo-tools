@@ -163,3 +163,14 @@ def test_raises_when_input_is_not_a_directory(tmp_path):
 
     with pytest.raises(NotADirectoryError, match="Input path is not a directory"):
         organise_by_date(str(input_file), str(output_dir), dry_run=False)
+
+def test_handles_empty_input_directory(tmp_path):
+    input_dir = tmp_path / "input"
+    output_dir = tmp_path / "output"
+
+    input_dir.mkdir()
+    output_dir.mkdir()
+
+    organise_by_date(str(input_dir), str(output_dir), dry_run=False)
+
+    assert not any(output_dir.iterdir())
