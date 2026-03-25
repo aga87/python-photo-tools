@@ -149,3 +149,7 @@ The testing pattern is fully implemented for organise-by-date, including:
 - edge cases (unsupported files, missing metadata, collisions)
 
 Other commands follow the same structure but are not yet covered.
+
+### Makefile
+
+Common development tasks are available via the Makefile.
