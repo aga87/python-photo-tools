@@ -9,6 +9,9 @@ description = "Python CLI tools for photography workflows"
 requires-python = ">=3.13"
 dependencies = ["typer>=0.24,<1.0", "pillow>=12.1,<13.0"]
 
+[dependency-groups]
+dev = ["pytest>=9,<10"]
+
 [project.scripts]
 photo-tools = "photo_tools.cli:app"
 
