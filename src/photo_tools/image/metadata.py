@@ -1,7 +1,8 @@
-from pathlib import Path
-import subprocess
 import json
+import subprocess
 from datetime import datetime
+from pathlib import Path
+
 
 def get_exif_metadata(file_path: Path) -> dict:
     result = subprocess.run(

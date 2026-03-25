@@ -3,7 +3,6 @@ from typing import Iterable
 
 from photo_tools.exceptions import MissingDependencyError
 
-
 DEPENDENCY_REGISTRY: dict[str, list[str]] = {
     "exif": ["exiftool"],
 }

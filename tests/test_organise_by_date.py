@@ -22,6 +22,7 @@ def test_dry_run_does_not_move_files(tmp_path, monkeypatch):
     assert image_file.exists()
     assert not (output_dir / "2024-05-17" / "photo.jpg").exists()
 
+
 def test_moves_file_into_date_folder(tmp_path, monkeypatch):
     input_dir = tmp_path / "input"
     output_dir = tmp_path / "output"
@@ -118,6 +119,7 @@ def test_moves_files_into_separate_date_folders(tmp_path, monkeypatch):
     assert (output_dir / "2024-05-18" / "second.jpg").exists()
     assert not first_file.exists()
     assert not second_file.exists()
+
 
 def test_skips_file_when_destination_already_exists(tmp_path, monkeypatch):
     input_dir = tmp_path / "input"

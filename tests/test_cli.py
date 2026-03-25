@@ -19,6 +19,7 @@ def test_missing_dependency(monkeypatch):
     assert "Error:" in result.output
     assert "required but not installed" in result.output
 
+
 def test_dependency_check_passes(monkeypatch):
     def fake_which(_):
         return "/usr/bin/fake-exiftool"
@@ -54,7 +55,6 @@ def test_organise_by_date_command_moves_file(tmp_path, monkeypatch):
     assert result.exit_code == 0
     assert not image_file.exists()
     assert (output_dir / "2024-05-17" / "photo.jpg").exists()
-
 
 
 def test_organise_by_date_command_dry_run_does_not_move_file(tmp_path, monkeypatch):

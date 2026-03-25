@@ -1,6 +1,8 @@
 class PhotoToolsError(Exception):
     """Base exception for the project."""
+
     pass
+
 
 class MissingDependencyError(PhotoToolsError):
     def __init__(self, dependency: str):

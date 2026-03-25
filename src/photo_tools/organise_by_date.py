@@ -1,10 +1,9 @@
-from pathlib import Path
 import logging
 import shutil
+from pathlib import Path
 
-from photo_tools.image.metadata import get_image_date
 from photo_tools.core.validation import validate_input_dir
-
+from photo_tools.image.metadata import get_image_date
 
 logger = logging.getLogger(__name__)
 
@@ -67,6 +66,6 @@ def organise_by_date(
             else:
                 shutil.move(str(file_path), str(target_file))
                 logger.info(f"Moved {file_path.name} → {target_dir}")
-                        
+
         except Exception as e:
             logger.debug(f"Skipping {file_path.name}: {e}")
