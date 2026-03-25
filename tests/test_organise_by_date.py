@@ -118,3 +118,28 @@ def test_moves_files_into_separate_date_folders(tmp_path, monkeypatch):
     assert (output_dir / "2024-05-18" / "second.jpg").exists()
     assert not first_file.exists()
     assert not second_file.exists()
+
+def test_skips_file_when_destination_already_exists(tmp_path, monkeypatch):
+    input_dir = tmp_path / "input"
+    output_dir = tmp_path / "output"
+    target_dir = output_dir / "2024-05-17"
+
+    input_dir.mkdir()
+    target_dir.mkdir(parents=True)
+
+    source_file = input_dir / "photo.jpg"
+    existing_file = target_dir / "photo.jpg"
+
+    source_file.write_text("new file")
+    existing_file.write_text("existing file")
+
+    monkeypatch.setattr(
+        "photo_tools.organise_by_date.get_image_date",
+        lambda _: datetime(2024, 5, 17),
+    )
+
+    organise_by_date(str(input_dir), str(output_dir), dry_run=False)
+
+    assert source_file.exists()
+    assert existing_file.exists()
+    assert existing_file.read_text() == "existing file"
