@@ -68,3 +68,23 @@ def test_skips_unsupported_files(tmp_path, monkeypatch):
     assert moved_file.exists()
     assert unsupported_file.exists()
     assert not (output_dir / "2024-05-17" / "notes.txt").exists()
+
+
+def test_skips_files_with_missing_date_metadata(tmp_path, monkeypatch):
+    input_dir = tmp_path / "input"
+    output_dir = tmp_path / "output"
+    input_dir.mkdir()
+    output_dir.mkdir()
+
+    image_file = input_dir / "photo.jpg"
+    image_file.write_text("fake image content")
+
+    monkeypatch.setattr(
+        "photo_tools.organise_by_date.get_image_date",
+        lambda _: (_ for _ in ()).throw(ValueError("No DateTimeOriginal")),
+    )
+
+    organise_by_date(str(input_dir), str(output_dir), dry_run=False)
+
+    assert image_file.exists()
+    assert not any(output_dir.rglob("*"))
