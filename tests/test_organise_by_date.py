@@ -42,3 +42,29 @@ def test_moves_file_into_date_folder(tmp_path, monkeypatch):
 
     assert not image_file.exists()
     assert moved_file.exists()
+
+
+def test_skips_unsupported_files(tmp_path, monkeypatch):
+    input_dir = tmp_path / "input"
+    output_dir = tmp_path / "output"
+    input_dir.mkdir()
+    output_dir.mkdir()
+
+    supported_file = input_dir / "photo.jpg"
+    unsupported_file = input_dir / "notes.txt"
+
+    supported_file.write_text("fake image content")
+    unsupported_file.write_text("not an image")
+
+    monkeypatch.setattr(
+        "photo_tools.organise_by_date.get_image_date",
+        lambda _: datetime(2024, 5, 17),
+    )
+
+    organise_by_date(str(input_dir), str(output_dir), dry_run=False)
+
+    moved_file = output_dir / "2024-05-17" / "photo.jpg"
+
+    assert moved_file.exists()
+    assert unsupported_file.exists()
+    assert not (output_dir / "2024-05-17" / "notes.txt").exists()
