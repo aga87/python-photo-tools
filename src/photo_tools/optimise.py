@@ -1,6 +1,6 @@
+import logging
 from io import BytesIO
 from pathlib import Path
-import logging
 
 from PIL import Image
 

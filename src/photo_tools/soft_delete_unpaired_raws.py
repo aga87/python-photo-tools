@@ -1,6 +1,6 @@
-from pathlib import Path
 import logging
 import shutil
+from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
@@ -30,7 +30,8 @@ def soft_delete_unpaired_raws(
         raise NotADirectoryError(f"JPG path is not a directory: {jpg_path}")
 
     jpg_files = [
-        f for f in jpg_path.iterdir()
+        f
+        for f in jpg_path.iterdir()
         if f.is_file() and f.suffix.lower() in JPG_EXTENSIONS
     ]
 
@@ -43,10 +44,7 @@ def soft_delete_unpaired_raws(
 
         raw_stem = raw_file.stem.lower()
 
-        has_match = any(
-            jpg.name.lower().startswith(raw_stem)
-            for jpg in jpg_files
-        )
+        has_match = any(jpg.name.lower().startswith(raw_stem) for jpg in jpg_files)
 
         if has_match:
             logger.debug(f"Keeping {raw_file.name} (matched JPG)")

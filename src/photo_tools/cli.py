@@ -1,13 +1,15 @@
 import typer
+
 from photo_tools.core.dependencies import validate_feature
 from photo_tools.exceptions import MissingDependencyError
+from photo_tools.logging_config import setup_logging
+from photo_tools.optimise import optimise
 from photo_tools.organise_by_date import organise_by_date
 from photo_tools.organise_by_type import organise_by_type
 from photo_tools.soft_delete_unpaired_raws import soft_delete_unpaired_raws
-from photo_tools.optimise import optimise
-from photo_tools.logging_config import setup_logging
 
 app = typer.Typer()
+
 
 @app.callback()
 def main():
@@ -20,6 +22,7 @@ def main():
 
 
 setup_logging()
+
 
 @app.command("organise-by-date")
 def organise_by_date_cmd(
@@ -34,12 +37,14 @@ def organise_by_date_cmd(
 ) -> None:
     organise_by_date(input, output, suffix, dry_run)
 
+
 @app.command("organise-by-type")
 def organise_by_type_cmd(
     input: str,
     dry_run: bool = typer.Option(False, "--dry-run"),
 ) -> None:
     organise_by_type(input, dry_run)
+
 
 @app.command("soft-delete-unpaired-raws")
 def soft_delete_unpaired_raws_cmd(
@@ -53,12 +58,14 @@ def soft_delete_unpaired_raws_cmd(
 ) -> None:
     soft_delete_unpaired_raws(raw_dir, jpg_dir, dry_run)
 
+
 @app.command("optimise")
 def optimise_cmd(
     input_dir: str,
     dry_run: bool = typer.Option(False, "--dry-run"),
 ) -> None:
     optimise(input_dir, dry_run)
+
 
 if __name__ == "__main__":
     app()
