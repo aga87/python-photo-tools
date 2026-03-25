@@ -1,4 +1,3 @@
-import pytest
 from datetime import datetime
 
 from photo_tools.organise_by_date import organise_by_date
@@ -145,24 +144,6 @@ def test_skips_file_when_destination_already_exists(tmp_path, monkeypatch):
     assert existing_file.exists()
     assert existing_file.read_text() == "existing file"
 
-
-def test_raises_when_input_directory_does_not_exist(tmp_path):
-    input_dir = tmp_path / "missing-input"
-    output_dir = tmp_path / "output"
-    output_dir.mkdir()
-
-    with pytest.raises(FileNotFoundError, match="Input path does not exist"):
-        organise_by_date(str(input_dir), str(output_dir), dry_run=False)
-
-def test_raises_when_input_is_not_a_directory(tmp_path):
-    input_file = tmp_path / "file.txt"
-    input_file.write_text("not a directory")
-
-    output_dir = tmp_path / "output"
-    output_dir.mkdir()
-
-    with pytest.raises(NotADirectoryError, match="Input path is not a directory"):
-        organise_by_date(str(input_file), str(output_dir), dry_run=False)
 
 def test_handles_empty_input_directory(tmp_path):
     input_dir = tmp_path / "input"

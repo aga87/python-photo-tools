@@ -2,6 +2,8 @@ from pathlib import Path
 import shutil
 import logging
 
+from photo_tools.core.validation import validate_input_dir
+
 logger = logging.getLogger(__name__)
 
 RAW_EXTENSIONS = {".raf"}
@@ -11,11 +13,7 @@ JPG_EXTENSIONS = {".jpg", ".jpeg"}
 def organise_by_type(input_dir: str, dry_run: bool = False) -> None:
     input_path = Path(input_dir)
 
-    if not input_path.exists():
-        raise FileNotFoundError(f"Input path does not exist: {input_path}")
-
-    if not input_path.is_dir():
-        raise NotADirectoryError(f"Input path is not a directory: {input_path}")
+    validate_input_dir(input_path)
 
     raws_dir = input_path / "raws"
     jpgs_dir = input_path / "jpgs"

@@ -4,6 +4,8 @@ import logging
 
 from PIL import Image
 
+from photo_tools.core.validation import validate_input_dir
+
 logger = logging.getLogger(__name__)
 
 IMAGE_EXTENSIONS = {".jpg", ".jpeg"}
@@ -18,11 +20,7 @@ OUTPUT_PREFIX = "lq_"
 def optimise(input_dir: str, dry_run: bool = False) -> None:
     input_path = Path(input_dir)
 
-    if not input_path.exists():
-        raise FileNotFoundError(f"Input path does not exist: {input_path}")
-
-    if not input_path.is_dir():
-        raise NotADirectoryError(f"Input path is not a directory: {input_path}")
+    validate_input_dir(input_path)
 
     for file_path in input_path.iterdir():
         if not file_path.is_file():
