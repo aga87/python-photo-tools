@@ -1,14 +1,9 @@
 from pathlib import Path
 import subprocess
 import json
-import shutil
 from datetime import datetime
 
-
 def get_exif_metadata(file_path: Path) -> dict:
-    if not shutil.which("exiftool"):
-        raise RuntimeError("exiftool is required but not installed")
-
     result = subprocess.run(
         ["exiftool", "-json", str(file_path)],
         capture_output=True,

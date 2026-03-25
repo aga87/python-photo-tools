@@ -1,7 +1,10 @@
 from pathlib import Path
 import logging
 import shutil
+
 from photo_tools.image.metadata import get_image_date
+from photo_tools.core.validation import validate_input_dir
+
 
 logger = logging.getLogger(__name__)
 
@@ -21,11 +24,7 @@ def organise_by_date(
     input_path = Path(input_dir)
     output_path = Path(output_dir)
 
-    if not input_path.exists():
-        raise FileNotFoundError(f"Input path does not exist: {input_path}")
-
-    if not input_path.is_dir():
-        raise NotADirectoryError(f"Input path is not a directory: {input_path}")
+    validate_input_dir(input_path)
 
     output_path.mkdir(parents=True, exist_ok=True)
 
