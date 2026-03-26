@@ -1,3 +1,6 @@
+[![CI](https://github.com/aga87/python-photo-tools/actions/workflows/ci.yml/badge.svg)](https://github.com/aga87/python-photo-tools/actions)
+
+
 # Python Photo Tools
 
 A command-line tool for organising and processing photos using Python.
