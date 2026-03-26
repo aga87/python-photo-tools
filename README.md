@@ -90,17 +90,18 @@ photo-tools organise-by-date <INPUT_DIR> <OUTPUT_DIR> --suffix <SUFFIX>
 photo-tools organise-by-date <INPUT_DIR> <OUTPUT_DIR> --dry-run
 ```
 
-#### organise-by-type
+#### separate-raws
 
-- Organise images into `raws/` and `jpgs/` subfolders within the input directory
+- Move RAW images into a `raws/` subfolder within the input directory
+- Non-RAW files are left unchanged
 - Files are moved (not copied) in place
 - If a destination file already exists, it is skipped (no overwrite)
 
 ```shell
-photo-tools organise-by-type <INPUT_DIR>
+photo-tools separate-raws <INPUT_DIR>
 ```
 ```shell
-photo-tools organise-by-type <INPUT_DIR> --dry-run
+photo-tools separate-raws <INPUT_DIR> --dry-run
 ```
 
 #### soft-delete-unpaired-raws
