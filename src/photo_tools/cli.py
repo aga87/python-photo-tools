@@ -8,9 +8,7 @@ from photo_tools.organise_by_date import organise_by_date
 from photo_tools.organise_by_type import organise_by_type
 from photo_tools.soft_delete_unpaired_raws import soft_delete_unpaired_raws
 
-app = typer.Typer(
-    help="CLI tools for organising and optimising photography workflows."
-)
+app = typer.Typer(help="CLI tools for organising and optimising photography workflows.")
 
 
 @app.callback()
@@ -91,7 +89,7 @@ def soft_delete_unpaired_raws_cmd(
 
 @app.command(
     "optimise",
-    help="Resize JPG images to max 2500px width and compress to ≤500KB using quality " \
+    help="Resize JPG images to max 2500px width and compress to ≤500KB using quality "
     "70-100, saving as prefixed copies.",
 )
 def optimise_cmd(
