@@ -1,6 +1,8 @@
 .venv/
+.venv-test
 __pycache__/
 *.pyc
 .DS_Store
 *.egg-info/
 data
+dist/
