@@ -41,6 +41,11 @@ List available commands:
 ```bash
 photo-tools --help
 ```
+Each command provides detailed usage, including arguments and options:
+
+```shell
+photo-tools <command> --help
+```
 
 ### Commands
 
