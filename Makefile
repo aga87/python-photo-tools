@@ -7,7 +7,10 @@ lint-fix:
 format:
 	ruff format .
 
+typecheck:
+	mypy src
+
 test:
 	pytest
 
-check: lint test
+check: lint test typecheck

@@ -36,8 +36,8 @@ def optimise(input_dir: str, dry_run: bool = False) -> None:
 
         output_path = file_path.with_name(f"{OUTPUT_PREFIX}{file_path.name}")
 
-        with Image.open(file_path) as img:
-            img = img.convert("RGB")
+        with Image.open(file_path) as original_img:
+            img = original_img.convert("RGB")
             resized_img = resize_to_max_width(img, MAX_WIDTH)
             jpeg_bytes, quality = find_best_jpeg_bytes(resized_img)
 
