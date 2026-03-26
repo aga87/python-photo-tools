@@ -2,9 +2,10 @@ import json
 import subprocess
 from datetime import datetime
 from pathlib import Path
+from typing import Any, Dict
 
 
-def get_exif_metadata(file_path: Path) -> dict:
+def get_exif_metadata(file_path: Path) -> Dict[str, Any]:
     result = subprocess.run(
         ["exiftool", "-json", str(file_path)],
         capture_output=True,
@@ -14,8 +15,8 @@ def get_exif_metadata(file_path: Path) -> dict:
 
     data = json.loads(result.stdout)
 
-    if not data or not data[0]:
-        raise ValueError("No EXIF data")
+    if not isinstance(data, list) or not data or not isinstance(data[0], dict):
+        raise ValueError("Invalid EXIF data format")
 
     return data[0]
 

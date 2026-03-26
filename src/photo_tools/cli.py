@@ -12,7 +12,7 @@ app = typer.Typer()
 
 
 @app.callback()
-def main():
+def main() -> None:
     try:
         # validate dependencies needed globally (if any)
         validate_feature("exif")
