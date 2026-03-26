@@ -5,7 +5,7 @@ from photo_tools.exceptions import MissingDependencyError
 from photo_tools.logging_config import setup_logging
 from photo_tools.optimise import optimise
 from photo_tools.organise_by_date import organise_by_date
-from photo_tools.organise_by_type import organise_by_type
+from photo_tools.separate_raws import separate_raws
 from photo_tools.soft_delete_unpaired_raws import soft_delete_unpaired_raws
 
 app = typer.Typer(help="CLI tools for organising and optimising photography workflows.")
@@ -49,20 +49,23 @@ def organise_by_date_cmd(
     organise_by_date(input_dir, output_dir, suffix, dry_run)
 
 
-@app.command("organise-by-type")
-def organise_by_type_cmd(
+@app.command(
+    "separate-raws",
+    help="Move RAW images into a 'raws' folder",
+)
+def separate_raws_cmd(
     input_dir: str = typer.Argument(
         ...,
-        help="Directory containing images to organise by type (JPG and RAF supported)",
+        help="Directory containing images from which RAW files should be separated.",
     ),
     dry_run: bool = typer.Option(
         False,
         "--dry-run",
-        help="Preview changes without moving files",
+        help="Preview changes without moving files.",
     ),
 ) -> None:
-    """Organise images into 'jpgs' and 'raws' folders (supports .jpg/.jpeg and .raf)."""
-    organise_by_type(input_dir, dry_run)
+    """Move RAW images into a 'raws' folder."""
+    separate_raws(input_dir, dry_run)
 
 
 @app.command(
