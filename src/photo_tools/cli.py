@@ -24,25 +24,25 @@ def main() -> None:
 setup_logging()
 
 
-@app.command("organise-by-date")
+@app.command("by-date")
 def organise_by_date_cmd(
     input_dir: str = typer.Argument(
         ...,
-        help="Directory containing input images",
+        help="Directory containing input images.",
     ),
     output_dir: str = typer.Argument(
         ...,
-        help="Directory where organised images will be saved",
+        help="Directory where organised images will be saved.",
     ),
     suffix: str | None = typer.Option(
         None,
         "--suffix",
-        help="Optional suffix appended to folder names (e.g. location)",
+        help="Optional suffix appended to folder names (e.g. location).",
     ),
     dry_run: bool = typer.Option(
         False,
         "--dry-run",
-        help="Preview changes without moving files",
+        help="Preview changes without moving files.",
     ),
 ) -> None:
     """Organise images into folders based on capture date."""
@@ -50,7 +50,7 @@ def organise_by_date_cmd(
 
 
 @app.command(
-    "separate-raws",
+    "raws",
     help="Move RAW images into a 'raws' folder",
 )
 def separate_raws_cmd(
@@ -69,7 +69,7 @@ def separate_raws_cmd(
 
 
 @app.command(
-    "clean-unpaired-raws",
+    "clean-raws",
     help="Move RAW files without matching JPGs to 'raws-to-delete'.",
 )
 def clean_unpaired_raws_cmd(

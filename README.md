@@ -73,24 +73,25 @@ All commands support a `--dry-run` flag. Use this to safely preview changes befo
 - No directories are created
 - Actions are only printed
 
+**All commands currently process files in the top-level input directory only.**
 
-#### organise-by-date
+#### by-date
 
 - Organise images into date-based folders (`YYYY-MM-DD`, optional suffix)
 - Files are moved (not copied) into the output directory
 - If a destination file already exists, it is skipped (no overwrite)
 
 ```shell
-photo-tools organise-by-date <INPUT_DIR> <OUTPUT_DIR>
+photo-tools by-date <INPUT_DIR> <OUTPUT_DIR>
 ```
 ```shell
-photo-tools organise-by-date <INPUT_DIR> <OUTPUT_DIR> --suffix <SUFFIX>
+photo-tools by-date <INPUT_DIR> <OUTPUT_DIR> --suffix <SUFFIX>
 ```
 ```shell
-photo-tools organise-by-date <INPUT_DIR> <OUTPUT_DIR> --dry-run
+photo-tools by-date <INPUT_DIR> <OUTPUT_DIR> --dry-run
 ```
 
-#### separate-raws
+#### raws
 
 - Move RAW images into a `raws/` subfolder within the input directory
 - Non-RAW files are left unchanged
@@ -98,24 +99,24 @@ photo-tools organise-by-date <INPUT_DIR> <OUTPUT_DIR> --dry-run
 - If a destination file already exists, it is skipped (no overwrite)
 
 ```shell
-photo-tools separate-raws <INPUT_DIR>
+photo-tools raws <INPUT_DIR>
 ```
 ```shell
-photo-tools separate-raws <INPUT_DIR> --dry-run
+photo-tools raws <INPUT_DIR> --dry-run
 ```
 
-#### clean-unpaired-raws
+#### clean-raws
 
 - Move RAW files to `raws-to-delete/` if no matching JPG (same prefix) exists
 - Matching is based on filename prefix (e.g. `abcd.RAF` matches `abcd_edit.jpg`)
 - Files are moved (not deleted), making the operation reversible
 
 ```shell
-photo-tools clean-unpaired-raws <RAW_DIR> <JPG_DIR>
+photo-tools clean-raws <RAW_DIR> <JPG_DIR>
 ```
 
 ```shell
-photo-tools clean-unpaired-raws <RAW_DIR> <JPG_DIR> --dry-run
+photo-tools clean-raws <RAW_DIR> <JPG_DIR> --dry-run
 ```
 
 #### optimise
