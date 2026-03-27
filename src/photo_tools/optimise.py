@@ -1,11 +1,10 @@
 import logging
-from io import BytesIO
 from pathlib import Path
 
 from PIL import Image
 
 from photo_tools.core.validation import validate_input_dir
-from photo_tools.image.optimisation import resize_to_max_width
+from photo_tools.image.optimisation import optimise_jpeg, resize_to_max_width
 
 logger = logging.getLogger(__name__)
 
@@ -40,7 +39,7 @@ def optimise(input_dir: str, dry_run: bool = False) -> None:
         with Image.open(file_path) as original_img:
             img = original_img.convert("RGB")
             resized_img = resize_to_max_width(img, MAX_WIDTH)
-            jpeg_bytes, quality = find_best_jpeg_bytes(resized_img)
+            jpeg_bytes, quality = optimise_jpeg(resized_img, MAX_FILE_SIZE_BYTES)
 
         size_kb = len(jpeg_bytes) // 1024
 
@@ -57,38 +56,3 @@ def optimise(input_dir: str, dry_run: bool = False) -> None:
             f"Optimised {file_path.name} → {output_path.name} "
             f"(quality={quality}, size={size_kb} KB)"
         )
-
-
-def find_best_jpeg_bytes(img: Image.Image) -> tuple[bytes, int]:
-    low = MIN_QUALITY
-    high = MAX_QUALITY
-
-    best_bytes: bytes | None = None
-    best_quality = MIN_QUALITY
-
-    while low <= high:
-        quality = (low + high) // 2
-        jpeg_bytes = render_jpeg_bytes(img, quality)
-
-        if len(jpeg_bytes) <= MAX_FILE_SIZE_BYTES:
-            best_bytes = jpeg_bytes
-            best_quality = quality
-            low = quality + 1
-        else:
-            high = quality - 1
-
-    if best_bytes is None:
-        return render_jpeg_bytes(img, MIN_QUALITY), MIN_QUALITY
-
-    return best_bytes, best_quality
-
-
-def render_jpeg_bytes(img: Image.Image, quality: int) -> bytes:
-    buffer = BytesIO()
-    img.save(
-        buffer,
-        format="JPEG",
-        quality=quality,
-        optimize=True,
-    )
-    return buffer.getvalue()
