@@ -1,6 +1,7 @@
 import typer
 
 from photo_tools.clean_unpaired_raws import clean_unpaired_raws
+from photo_tools.cli_errors import handle_cli_errors
 from photo_tools.core.dependencies import validate_feature
 from photo_tools.exceptions import MissingDependencyError
 from photo_tools.logging_config import setup_logging
@@ -25,6 +26,7 @@ setup_logging()
 
 
 @app.command("by-date")
+@handle_cli_errors
 def organise_by_date_cmd(
     input_dir: str = typer.Argument(
         ...,
@@ -53,6 +55,7 @@ def organise_by_date_cmd(
     "raws",
     help="Move RAW images into a 'raws' folder",
 )
+@handle_cli_errors
 def separate_raws_cmd(
     input_dir: str = typer.Argument(
         ...,
@@ -72,6 +75,7 @@ def separate_raws_cmd(
     "clean-raws",
     help="Move RAW files without matching JPGs to 'raws-to-delete'.",
 )
+@handle_cli_errors
 def clean_unpaired_raws_cmd(
     raw_dir: str = typer.Argument(
         ...,
@@ -95,6 +99,7 @@ def clean_unpaired_raws_cmd(
     help="Resize JPG images to max 2500px width and compress to ≤500KB using quality "
     "70-100, saving as prefixed copies.",
 )
+@handle_cli_errors
 def optimise_cmd(
     input_dir: str = typer.Argument(
         ...,
