@@ -56,4 +56,3 @@ def clean_unpaired_raws(
         trash_dir.mkdir(parents=True, exist_ok=True)
         shutil.move(str(raw_file), str(target_file))
         logger.info(f"Moved {raw_file.name} → {trash_dir}")
-        
