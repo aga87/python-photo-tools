@@ -5,6 +5,7 @@ from pathlib import Path
 from PIL import Image
 
 from photo_tools.core.validation import validate_input_dir
+from photo_tools.image.optimisation import resize_to_max_width
 
 logger = logging.getLogger(__name__)
 
@@ -56,14 +57,6 @@ def optimise(input_dir: str, dry_run: bool = False) -> None:
             f"Optimised {file_path.name} → {output_path.name} "
             f"(quality={quality}, size={size_kb} KB)"
         )
-
-
-def resize_to_max_width(img: Image.Image, max_width: int) -> Image.Image:
-    if img.width <= max_width:
-        return img
-
-    new_height = int(img.height * (max_width / img.width))
-    return img.resize((max_width, new_height), Image.Resampling.LANCZOS)
 
 
 def find_best_jpeg_bytes(img: Image.Image) -> tuple[bytes, int]:
