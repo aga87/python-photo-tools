@@ -2,6 +2,8 @@ import logging
 import shutil
 from pathlib import Path
 
+from photo_tools.core.validation import validate_input_dir
+
 logger = logging.getLogger(__name__)
 
 RAW_EXTENSIONS = {".raf"}
@@ -17,17 +19,8 @@ def clean_unpaired_raws(
     jpg_path = Path(jpg_dir)
     trash_dir = raw_path / "raws-to-delete"
 
-    if not raw_path.exists():
-        raise FileNotFoundError(f"RAW path does not exist: {raw_path}")
-
-    if not jpg_path.exists():
-        raise FileNotFoundError(f"JPG path does not exist: {jpg_path}")
-
-    if not raw_path.is_dir():
-        raise NotADirectoryError(f"RAW path is not a directory: {raw_path}")
-
-    if not jpg_path.is_dir():
-        raise NotADirectoryError(f"JPG path is not a directory: {jpg_path}")
+    validate_input_dir(raw_path)
+    validate_input_dir(jpg_path)
 
     jpg_files = [
         f
@@ -63,3 +56,4 @@ def clean_unpaired_raws(
         trash_dir.mkdir(parents=True, exist_ok=True)
         shutil.move(str(raw_file), str(target_file))
         logger.info(f"Moved {raw_file.name} → {trash_dir}")
+        
