@@ -104,18 +104,18 @@ photo-tools separate-raws <INPUT_DIR>
 photo-tools separate-raws <INPUT_DIR> --dry-run
 ```
 
-#### soft-delete-unpaired-raws
+#### clean-unpaired-raws
 
 - Move RAW files to `raws-to-delete/` if no matching JPG (same prefix) exists
 - Matching is based on filename prefix (e.g. `abcd.RAF` matches `abcd_edit.jpg`)
 - Files are moved (not deleted), making the operation reversible
 
 ```shell
-photo-tools soft-delete-unpaired-raws <RAW_DIR> <JPG_DIR>
+photo-tools clean-unpaired-raws <RAW_DIR> <JPG_DIR>
 ```
 
 ```shell
-photo-tools soft-delete-unpaired-raws <RAW_DIR> <JPG_DIR> --dry-run
+photo-tools clean-unpaired-raws <RAW_DIR> <JPG_DIR> --dry-run
 ```
 
 #### optimise

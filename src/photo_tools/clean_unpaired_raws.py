@@ -8,7 +8,7 @@ RAW_EXTENSIONS = {".raf"}
 JPG_EXTENSIONS = {".jpg", ".jpeg"}
 
 
-def soft_delete_unpaired_raws(
+def clean_unpaired_raws(
     raw_dir: str,
     jpg_dir: str,
     dry_run: bool = False,

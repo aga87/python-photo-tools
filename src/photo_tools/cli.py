@@ -1,12 +1,12 @@
 import typer
 
+from photo_tools.clean_unpaired_raws import clean_unpaired_raws
 from photo_tools.core.dependencies import validate_feature
 from photo_tools.exceptions import MissingDependencyError
 from photo_tools.logging_config import setup_logging
 from photo_tools.optimise import optimise
 from photo_tools.organise_by_date import organise_by_date
 from photo_tools.separate_raws import separate_raws
-from photo_tools.soft_delete_unpaired_raws import soft_delete_unpaired_raws
 
 app = typer.Typer(help="CLI tools for organising and optimising photography workflows.")
 
@@ -69,10 +69,10 @@ def separate_raws_cmd(
 
 
 @app.command(
-    "soft-delete-unpaired-raws",
-    help="Move RAW files without a matching JPG (by filename) to 'raws-to-delete'.",
+    "clean-unpaired-raws",
+    help="Move RAW files without matching JPGs to 'raws-to-delete'.",
 )
-def soft_delete_unpaired_raws_cmd(
+def clean_unpaired_raws_cmd(
     raw_dir: str = typer.Argument(
         ...,
         help="Directory containing RAW files.",
@@ -84,10 +84,10 @@ def soft_delete_unpaired_raws_cmd(
     dry_run: bool = typer.Option(
         False,
         "--dry-run",
-        help="Show which RAW files would be moved without making changes.",
+        help="Preview changes without moving files.",
     ),
 ) -> None:
-    soft_delete_unpaired_raws(raw_dir, jpg_dir, dry_run)
+    clean_unpaired_raws(raw_dir, jpg_dir, dry_run)
 
 
 @app.command(
