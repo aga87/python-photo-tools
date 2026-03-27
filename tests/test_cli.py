@@ -13,7 +13,7 @@ def test_missing_dependency(monkeypatch):
 
     monkeypatch.setattr("shutil.which", fake_which)
 
-    result = runner.invoke(app, ["organise-by-date", "in", "out"])
+    result = runner.invoke(app, ["by-date", "in", "out"])
 
     assert result.exit_code == 1
     assert "Error:" in result.output
@@ -49,7 +49,7 @@ def test_organise_by_date_command_moves_file(tmp_path, monkeypatch):
 
     result = runner.invoke(
         app,
-        ["organise-by-date", str(input_dir), str(output_dir)],
+        ["by-date", str(input_dir), str(output_dir)],
     )
 
     assert result.exit_code == 0
@@ -74,7 +74,7 @@ def test_organise_by_date_command_dry_run_does_not_move_file(tmp_path, monkeypat
 
     result = runner.invoke(
         app,
-        ["organise-by-date", str(input_dir), str(output_dir), "--dry-run"],
+        ["by-date", str(input_dir), str(output_dir), "--dry-run"],
     )
 
     assert result.exit_code == 0
