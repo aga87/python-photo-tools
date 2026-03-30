@@ -1,6 +1,10 @@
 from photo_tools.clean_unpaired_raws import clean_unpaired_raws
 
 
+def noop_report(level: str, message: str) -> None:
+    pass
+
+
 def test_dry_run_does_not_move_unpaired_raw_files(tmp_path):
     raw_dir = tmp_path / "raws"
     jpg_dir = tmp_path / "jpgs"
@@ -11,7 +15,12 @@ def test_dry_run_does_not_move_unpaired_raw_files(tmp_path):
     raw_file = raw_dir / "photo.raf"
     raw_file.write_text("fake raw content")
 
-    clean_unpaired_raws(str(raw_dir), str(jpg_dir), dry_run=True)
+    clean_unpaired_raws(
+        str(raw_dir),
+        str(jpg_dir),
+        report=noop_report,
+        dry_run=True,
+    )
 
     assert raw_file.exists()
     assert not (raw_dir / "raws-to-delete" / "photo.raf").exists()
@@ -27,7 +36,12 @@ def test_moves_unpaired_raw_file_into_raws_to_delete_folder(tmp_path):
     raw_file = raw_dir / "photo.raf"
     raw_file.write_text("fake raw content")
 
-    clean_unpaired_raws(str(raw_dir), str(jpg_dir), dry_run=False)
+    clean_unpaired_raws(
+        str(raw_dir),
+        str(jpg_dir),
+        report=noop_report,
+        dry_run=False,
+    )
 
     moved_file = raw_dir / "raws-to-delete" / "photo.raf"
 
@@ -48,7 +62,12 @@ def test_keeps_raw_file_when_matching_jpg_exists(tmp_path):
     raw_file.write_text("fake raw content")
     jpg_file.write_text("fake jpg content")
 
-    clean_unpaired_raws(str(raw_dir), str(jpg_dir), dry_run=False)
+    clean_unpaired_raws(
+        str(raw_dir),
+        str(jpg_dir),
+        report=noop_report,
+        dry_run=False,
+    )
 
     assert raw_file.exists()
     assert jpg_file.exists()
@@ -68,7 +87,12 @@ def test_keeps_raw_file_when_matching_jpg_starts_with_same_stem(tmp_path):
     raw_file.write_text("fake raw content")
     jpg_file.write_text("fake jpg content")
 
-    clean_unpaired_raws(str(raw_dir), str(jpg_dir), dry_run=False)
+    clean_unpaired_raws(
+        str(raw_dir),
+        str(jpg_dir),
+        report=noop_report,
+        dry_run=False,
+    )
 
     assert raw_file.exists()
     assert not (raw_dir / "raws-to-delete" / "photo.raf").exists()
@@ -89,7 +113,12 @@ def test_moves_only_unpaired_raw_files(tmp_path):
     unmatched_raw.write_text("unmatched raw")
     matching_jpg.write_text("matching jpg")
 
-    clean_unpaired_raws(str(raw_dir), str(jpg_dir), dry_run=False)
+    clean_unpaired_raws(
+        str(raw_dir),
+        str(jpg_dir),
+        report=noop_report,
+        dry_run=False,
+    )
 
     assert matched_raw.exists()
     assert not unmatched_raw.exists()
@@ -109,7 +138,12 @@ def test_ignores_non_raw_files_in_raw_directory(tmp_path):
     jpg_file.write_text("fake jpg content")
     txt_file.write_text("notes")
 
-    clean_unpaired_raws(str(raw_dir), str(jpg_dir), dry_run=False)
+    clean_unpaired_raws(
+        str(raw_dir),
+        str(jpg_dir),
+        report=noop_report,
+        dry_run=False,
+    )
 
     assert jpg_file.exists()
     assert txt_file.exists()
@@ -132,7 +166,12 @@ def test_skips_file_when_destination_already_exists(tmp_path):
     source_file.write_text("new raw")
     existing_file.write_text("existing raw")
 
-    clean_unpaired_raws(str(raw_dir), str(jpg_dir), dry_run=False)
+    clean_unpaired_raws(
+        str(raw_dir),
+        str(jpg_dir),
+        report=noop_report,
+        dry_run=False,
+    )
 
     assert source_file.exists()
     assert existing_file.exists()
@@ -146,7 +185,12 @@ def test_handles_empty_directories(tmp_path):
     raw_dir.mkdir()
     jpg_dir.mkdir()
 
-    clean_unpaired_raws(str(raw_dir), str(jpg_dir), dry_run=False)
+    clean_unpaired_raws(
+        str(raw_dir),
+        str(jpg_dir),
+        report=noop_report,
+        dry_run=False,
+    )
 
     assert not any(raw_dir.iterdir())
 
@@ -163,7 +207,12 @@ def test_ignores_nested_directories(tmp_path):
     nested_raw = nested_dir / "photo.raf"
     nested_raw.write_text("fake raw content")
 
-    clean_unpaired_raws(str(raw_dir), str(jpg_dir), dry_run=False)
+    clean_unpaired_raws(
+        str(raw_dir),
+        str(jpg_dir),
+        report=noop_report,
+        dry_run=False,
+    )
 
     assert nested_raw.exists()
     assert not (raw_dir / "raws-to-delete" / "photo.raf").exists()

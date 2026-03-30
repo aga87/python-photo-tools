@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 
 from photo_tools.clean_unpaired_raws import clean_unpaired_raws
 from photo_tools.cli_errors import handle_cli_errors
+from photo_tools.cli_reporter import make_reporter
 from photo_tools.core.dependencies import validate_feature
 from photo_tools.exceptions import MissingDependencyError
 from photo_tools.logging_config import setup_logging
@@ -59,10 +60,11 @@ def organise_by_date_cmd(
     organise_by_date(
         input_dir=input_dir,
         output_dir=output_dir,
+        report=make_reporter(verbose),
         suffix=suffix,
         dry_run=dry_run,
-        verbose=verbose,
     )
+
 
 @app.command(
     "raws",
@@ -89,8 +91,8 @@ def separate_raws_cmd(
     """Move RAW images into a 'raws' folder."""
     separate_raws(
         input_dir=input_dir,
+        report=make_reporter(verbose),
         dry_run=dry_run,
-        verbose=verbose,
     )
 
 
@@ -123,8 +125,8 @@ def clean_unpaired_raws_cmd(
     clean_unpaired_raws(
         raw_dir=raw_dir,
         jpg_dir=jpg_dir,
+        report=make_reporter(verbose),
         dry_run=dry_run,
-        verbose=verbose,
     )
 
 
@@ -153,8 +155,8 @@ def optimise_cmd(
 ) -> None:
     optimise(
         input_dir=input_dir,
+        report=make_reporter(verbose),
         dry_run=dry_run,
-        verbose=verbose,
     )
 
 

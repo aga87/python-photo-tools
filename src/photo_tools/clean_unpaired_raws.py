@@ -1,5 +1,6 @@
 import logging
 import shutil
+from collections.abc import Callable
 from pathlib import Path
 
 from photo_tools.core.validation import validate_input_dir
@@ -9,12 +10,14 @@ logger = logging.getLogger(__name__)
 RAW_EXTENSIONS = {".raf"}
 JPG_EXTENSIONS = {".jpg", ".jpeg"}
 
+Reporter = Callable[[str, str], None]
+
 
 def clean_unpaired_raws(
     raw_dir: str,
     jpg_dir: str,
+    report: Reporter,
     dry_run: bool = False,
-    verbose: bool = False,
 ) -> None:
     raw_path = Path(raw_dir)
     jpg_path = Path(jpg_dir)
@@ -23,7 +26,6 @@ def clean_unpaired_raws(
     validate_input_dir(raw_path)
     validate_input_dir(jpg_path)
 
-    # For the summary
     moved_count = 0
     dry_run_count = 0
     skipped_existing_count = 0
@@ -52,29 +54,36 @@ def clean_unpaired_raws(
 
         if target_file.exists():
             skipped_existing_count += 1
-            logger.warning(f"Skipping {raw_file.name}: already in raws-to-delete")
+            report(
+                "warning",
+                f"Skipping {raw_file.name}: already in raws-to-delete",
+            )
             continue
 
         if dry_run:
             dry_run_count += 1
-            if verbose:
-                logger.info(f"[DRY RUN] Would move {raw_file.name} -> {trash_dir}")
+            report(
+                "info",
+                f"[DRY RUN] Would move {raw_file.name} -> {trash_dir}",
+            )
             continue
 
         trash_dir.mkdir(parents=True, exist_ok=True)
         shutil.move(str(raw_file), str(target_file))
         moved_count += 1
 
-        if verbose:
-            logger.info(f"Moved {raw_file.name} -> {trash_dir}")
+        report("info", f"Moved {raw_file.name} -> {trash_dir}")
 
     # Summary
+
     if dry_run:
-        logger.info(f"Dry run complete: would move {dry_run_count} file(s)")
+        report("summary", f"Dry run complete: would move {dry_run_count} file(s)")
     else:
-        logger.info(f"Moved {moved_count} file(s)")
+        report("summary", f"Moved {moved_count} file(s)")
 
     if skipped_existing_count:
-        logger.warning(
-            f"Skipped {skipped_existing_count} file(s): already exist in raws-to-delete"
+        report(
+            "warning",
+            f"Skipped {skipped_existing_count} file(s): "
+            "already exist in raws-to-delete",
         )
