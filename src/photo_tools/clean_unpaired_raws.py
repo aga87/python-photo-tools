@@ -1,5 +1,6 @@
 import logging
 import shutil
+from collections.abc import Callable
 from pathlib import Path
 
 from photo_tools.core.validation import validate_input_dir
@@ -9,10 +10,13 @@ logger = logging.getLogger(__name__)
 RAW_EXTENSIONS = {".raf"}
 JPG_EXTENSIONS = {".jpg", ".jpeg"}
 
+Reporter = Callable[[str, str], None]
+
 
 def clean_unpaired_raws(
     raw_dir: str,
     jpg_dir: str,
+    report: Reporter,
     dry_run: bool = False,
 ) -> None:
     raw_path = Path(raw_dir)
@@ -21,6 +25,10 @@ def clean_unpaired_raws(
 
     validate_input_dir(raw_path)
     validate_input_dir(jpg_path)
+
+    moved_count = 0
+    dry_run_count = 0
+    skipped_existing_count = 0
 
     jpg_files = [
         f
@@ -36,23 +44,46 @@ def clean_unpaired_raws(
             continue
 
         raw_stem = raw_file.stem.lower()
-
         has_match = any(jpg.name.lower().startswith(raw_stem) for jpg in jpg_files)
 
         if has_match:
-            logger.debug(f"Keeping {raw_file.name} (matched JPG)")
+            logger.debug("Keeping %s (matched JPG)", raw_file.name)
             continue
 
         target_file = trash_dir / raw_file.name
 
         if target_file.exists():
-            logger.info(f"Skipping (already moved): {target_file.name}")
+            skipped_existing_count += 1
+            report(
+                "warning",
+                f"Skipping {raw_file.name}: already in raws-to-delete",
+            )
             continue
 
         if dry_run:
-            logger.info(f"[DRY RUN] Would move {raw_file.name} → {trash_dir}")
+            dry_run_count += 1
+            report(
+                "info",
+                f"[DRY RUN] Would move {raw_file.name} -> {trash_dir}",
+            )
             continue
 
         trash_dir.mkdir(parents=True, exist_ok=True)
         shutil.move(str(raw_file), str(target_file))
-        logger.info(f"Moved {raw_file.name} → {trash_dir}")
+        moved_count += 1
+
+        report("info", f"Moved {raw_file.name} -> {trash_dir}")
+
+    # Summary
+
+    if dry_run:
+        report("summary", f"Dry run complete: would move {dry_run_count} file(s)")
+    else:
+        report("summary", f"Moved {moved_count} file(s)")
+
+    if skipped_existing_count:
+        report(
+            "warning",
+            f"Skipped {skipped_existing_count} file(s): "
+            "already exist in raws-to-delete",
+        )

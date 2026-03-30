@@ -1,7 +1,9 @@
 import typer
+from dotenv import load_dotenv
 
 from photo_tools.clean_unpaired_raws import clean_unpaired_raws
 from photo_tools.cli_errors import handle_cli_errors
+from photo_tools.cli_reporter import make_reporter
 from photo_tools.core.dependencies import validate_feature
 from photo_tools.exceptions import MissingDependencyError
 from photo_tools.logging_config import setup_logging
@@ -12,6 +14,10 @@ from photo_tools.separate_raws import separate_raws
 app = typer.Typer(help="CLI tools for organising and optimising photography workflows.")
 
 
+load_dotenv()
+setup_logging()
+
+
 @app.callback()
 def main() -> None:
     try:
@@ -20,9 +26,6 @@ def main() -> None:
     except MissingDependencyError as e:
         typer.secho(f"Error: {e}", fg=typer.colors.RED, err=True)
         raise typer.Exit(code=1)
-
-
-setup_logging()
 
 
 @app.command("by-date")
@@ -46,9 +49,21 @@ def organise_by_date_cmd(
         "--dry-run",
         help="Preview changes without moving files.",
     ),
+    verbose: bool = typer.Option(
+        False,
+        "--verbose",
+        "-v",
+        help="Show per-file output.",
+    ),
 ) -> None:
     """Organise images into folders based on capture date."""
-    organise_by_date(input_dir, output_dir, suffix, dry_run)
+    organise_by_date(
+        input_dir=input_dir,
+        output_dir=output_dir,
+        report=make_reporter(verbose),
+        suffix=suffix,
+        dry_run=dry_run,
+    )
 
 
 @app.command(
@@ -66,9 +81,19 @@ def separate_raws_cmd(
         "--dry-run",
         help="Preview changes without moving files.",
     ),
+    verbose: bool = typer.Option(
+        False,
+        "--verbose",
+        "-v",
+        help="Show per-file output.",
+    ),
 ) -> None:
     """Move RAW images into a 'raws' folder."""
-    separate_raws(input_dir, dry_run)
+    separate_raws(
+        input_dir=input_dir,
+        report=make_reporter(verbose),
+        dry_run=dry_run,
+    )
 
 
 @app.command(
@@ -90,8 +115,19 @@ def clean_unpaired_raws_cmd(
         "--dry-run",
         help="Preview changes without moving files.",
     ),
+    verbose: bool = typer.Option(
+        False,
+        "--verbose",
+        "-v",
+        help="Show per-file output.",
+    ),
 ) -> None:
-    clean_unpaired_raws(raw_dir, jpg_dir, dry_run)
+    clean_unpaired_raws(
+        raw_dir=raw_dir,
+        jpg_dir=jpg_dir,
+        report=make_reporter(verbose),
+        dry_run=dry_run,
+    )
 
 
 @app.command(
@@ -110,8 +146,18 @@ def optimise_cmd(
         "--dry-run",
         help="Show resulting size and quality without writing files.",
     ),
+    verbose: bool = typer.Option(
+        False,
+        "--verbose",
+        "-v",
+        help="Show per-file output.",
+    ),
 ) -> None:
-    optimise(input_dir, dry_run)
+    optimise(
+        input_dir=input_dir,
+        report=make_reporter(verbose),
+        dry_run=dry_run,
+    )
 
 
 if __name__ == "__main__":

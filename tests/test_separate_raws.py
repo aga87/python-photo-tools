@@ -1,6 +1,10 @@
 from photo_tools.separate_raws import separate_raws
 
 
+def noop_report(level: str, message: str) -> None:
+    pass
+
+
 def test_dry_run_does_not_move_raw_files(tmp_path):
     input_dir = tmp_path / "input"
     input_dir.mkdir()
@@ -8,7 +12,11 @@ def test_dry_run_does_not_move_raw_files(tmp_path):
     raw_file = input_dir / "photo.raf"
     raw_file.write_text("fake raw content")
 
-    separate_raws(str(input_dir), dry_run=True)
+    separate_raws(
+        str(input_dir),
+        report=noop_report,
+        dry_run=True,
+    )
 
     assert raw_file.exists()
     assert not (input_dir / "raws" / "photo.raf").exists()
@@ -21,7 +29,11 @@ def test_moves_raw_file_into_raws_folder(tmp_path):
     raw_file = input_dir / "photo.raf"
     raw_file.write_text("fake raw content")
 
-    separate_raws(str(input_dir), dry_run=False)
+    separate_raws(
+        str(input_dir),
+        report=noop_report,
+        dry_run=False,
+    )
 
     moved_file = input_dir / "raws" / "photo.raf"
 
@@ -39,7 +51,11 @@ def test_leaves_non_raw_files_in_place(tmp_path):
     jpg_file.write_text("fake jpg content")
     txt_file.write_text("notes")
 
-    separate_raws(str(input_dir), dry_run=False)
+    separate_raws(
+        str(input_dir),
+        report=noop_report,
+        dry_run=False,
+    )
 
     assert jpg_file.exists()
     assert txt_file.exists()
@@ -57,7 +73,11 @@ def test_moves_only_raw_files(tmp_path):
     raw_file.write_text("fake raw content")
     jpg_file.write_text("fake jpg content")
 
-    separate_raws(str(input_dir), dry_run=False)
+    separate_raws(
+        str(input_dir),
+        report=noop_report,
+        dry_run=False,
+    )
 
     assert (input_dir / "raws" / "photo.raf").exists()
     assert jpg_file.exists()
@@ -77,7 +97,11 @@ def test_skips_file_when_destination_already_exists(tmp_path):
     source_file.write_text("new raw")
     existing_file.write_text("existing raw")
 
-    separate_raws(str(input_dir), dry_run=False)
+    separate_raws(
+        str(input_dir),
+        report=noop_report,
+        dry_run=False,
+    )
 
     assert source_file.exists()
     assert existing_file.exists()
@@ -88,7 +112,11 @@ def test_handles_empty_input_directory(tmp_path):
     input_dir = tmp_path / "input"
     input_dir.mkdir()
 
-    separate_raws(str(input_dir), dry_run=False)
+    separate_raws(
+        str(input_dir),
+        report=noop_report,
+        dry_run=False,
+    )
 
     assert not any(input_dir.iterdir())
 
@@ -103,7 +131,11 @@ def test_ignores_nested_directories(tmp_path):
     nested_raw = nested_dir / "photo.raf"
     nested_raw.write_text("fake raw content")
 
-    separate_raws(str(input_dir), dry_run=False)
+    separate_raws(
+        str(input_dir),
+        report=noop_report,
+        dry_run=False,
+    )
 
     assert nested_raw.exists()
     assert not (input_dir / "raws" / "photo.raf").exists()
