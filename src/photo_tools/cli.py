@@ -48,10 +48,21 @@ def organise_by_date_cmd(
         "--dry-run",
         help="Preview changes without moving files.",
     ),
+    verbose: bool = typer.Option(
+        False,
+        "--verbose",
+        "-v",
+        help="Show per-file output.",
+    ),
 ) -> None:
     """Organise images into folders based on capture date."""
-    organise_by_date(input_dir, output_dir, suffix, dry_run)
-
+    organise_by_date(
+        input_dir=input_dir,
+        output_dir=output_dir,
+        suffix=suffix,
+        dry_run=dry_run,
+        verbose=verbose,
+    )
 
 @app.command(
     "raws",
@@ -68,9 +79,19 @@ def separate_raws_cmd(
         "--dry-run",
         help="Preview changes without moving files.",
     ),
+    verbose: bool = typer.Option(
+        False,
+        "--verbose",
+        "-v",
+        help="Show per-file output.",
+    ),
 ) -> None:
     """Move RAW images into a 'raws' folder."""
-    separate_raws(input_dir, dry_run)
+    separate_raws(
+        input_dir=input_dir,
+        dry_run=dry_run,
+        verbose=verbose,
+    )
 
 
 @app.command(
@@ -92,8 +113,19 @@ def clean_unpaired_raws_cmd(
         "--dry-run",
         help="Preview changes without moving files.",
     ),
+    verbose: bool = typer.Option(
+        False,
+        "--verbose",
+        "-v",
+        help="Show per-file output.",
+    ),
 ) -> None:
-    clean_unpaired_raws(raw_dir, jpg_dir, dry_run)
+    clean_unpaired_raws(
+        raw_dir=raw_dir,
+        jpg_dir=jpg_dir,
+        dry_run=dry_run,
+        verbose=verbose,
+    )
 
 
 @app.command(
@@ -112,8 +144,18 @@ def optimise_cmd(
         "--dry-run",
         help="Show resulting size and quality without writing files.",
     ),
+    verbose: bool = typer.Option(
+        False,
+        "--verbose",
+        "-v",
+        help="Show per-file output.",
+    ),
 ) -> None:
-    optimise(input_dir, dry_run)
+    optimise(
+        input_dir=input_dir,
+        dry_run=dry_run,
+        verbose=verbose,
+    )
 
 
 if __name__ == "__main__":

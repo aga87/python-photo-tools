@@ -17,10 +17,18 @@ MAX_QUALITY = 100
 OUTPUT_PREFIX = "lq_"
 
 
-def optimise(input_dir: str, dry_run: bool = False) -> None:
+def optimise(
+    input_dir: str,
+    dry_run: bool = False,
+    verbose: bool = False,
+) -> None:
     input_path = Path(input_dir)
 
     validate_input_dir(input_path)
+
+    optimised_count = 0
+    dry_run_count = 0
+    failed_count = 0
 
     for file_path in input_path.iterdir():
         if not file_path.is_file():
@@ -36,23 +44,44 @@ def optimise(input_dir: str, dry_run: bool = False) -> None:
 
         output_path = file_path.with_name(f"{OUTPUT_PREFIX}{file_path.name}")
 
-        with Image.open(file_path) as original_img:
-            img = original_img.convert("RGB")
-            resized_img = resize_to_max_width(img, MAX_WIDTH)
-            jpeg_bytes, quality = optimise_jpeg(resized_img, MAX_FILE_SIZE_BYTES)
+        try:
+            with Image.open(file_path) as original_img:
+                img = original_img.convert("RGB")
+                resized_img = resize_to_max_width(img, MAX_WIDTH)
+                jpeg_bytes, quality = optimise_jpeg(
+                    resized_img,
+                    MAX_FILE_SIZE_BYTES,
+                )
+        except Exception as e:
+            failed_count += 1
+            logger.warning(f"Skipping {file_path.name}: could not optimise image")
+            logger.debug(f"Reason: {e}")
+            continue
 
         size_kb = len(jpeg_bytes) // 1024
 
         if dry_run:
-            logger.info(
-                f"[DRY RUN] Would optimise {file_path.name} → {output_path.name} "
-                f"(quality={quality}, size={size_kb} KB)"
-            )
+            dry_run_count += 1
+            if verbose:
+                logger.info(
+                    f"[DRY RUN] Would optimise {file_path.name} -> {output_path.name} "
+                    f"(quality={quality}, size={size_kb} KB)"
+                )
             continue
 
         output_path.write_bytes(jpeg_bytes)
+        optimised_count += 1
 
-        logger.info(
-            f"Optimised {file_path.name} → {output_path.name} "
-            f"(quality={quality}, size={size_kb} KB)"
-        )
+        if verbose:
+            logger.info(
+                f"Optimised {file_path.name} -> {output_path.name} "
+                f"(quality={quality}, size={size_kb} KB)"
+            )
+
+    if dry_run:
+        logger.info(f"Dry run complete: would optimise {dry_run_count} file(s)")
+    else:
+        logger.info(f"Optimised {optimised_count} file(s)")
+
+    if failed_count:
+        logger.warning(f"Skipped {failed_count} file(s): could not optimise image")
