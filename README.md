@@ -2,7 +2,7 @@
 
 # Python Photo Tools
 
-A command-line tool for organising and processing photos using Python.
+Command-line tools for organising photos by date, managing RAW/JPG pairs, and optimising images.
 
 ## Supported formats
 
@@ -28,13 +28,7 @@ Install (macOS)
 brew install exiftool
 ```
 
-The application will fail if it is not installed.
-
-If running in a Docker container, include:
-
-```Dockerfile
-RUN apt-get update && apt-get install -y exiftool
-```
+On Linux, install via your package manager (e.g. `apt install exiftool`).
 
 ## Installation
 
@@ -49,7 +43,8 @@ pipx install git+https://github.com/aga87/python-photo-tools.git
 Clone the repository and install:
 
 ```shell
-pip install .
+pip install -e .
+pip install --group dev -e .
 ```
 
 ## Usage
@@ -119,7 +114,7 @@ photo-tools clean-raws <RAW_DIR> <JPG_DIR>
 
 - Resize images to a maximum width of `2500px`
 - Choose the highest quality that results in a file size ≤ `500 KB` (never below `70%`)
-- Saves optimised images with prefix `lq_` in the same directory (existing files are overwritten)
+- Saves optimised images with prefix `lq_` in the same directory (overwrites existing files)
 
 
 ```shell
@@ -148,7 +143,7 @@ data/input/
 You can run the CLI module directly for testing:
 
 ```shell
-python -m photo_tools.cli organise-by-date ./data/input ./data/output
+python -m photo_tools.cli by-date ./data/input ./data/output
 ```
 
 ### Running tests
