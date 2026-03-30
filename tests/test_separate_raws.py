@@ -1,4 +1,4 @@
-from photo_tools.separate_raws import separate_raws
+from photo_tools.commands.separate_raws import separate_raws
 
 
 def noop_report(level: str, message: str) -> None:

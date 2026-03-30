@@ -1,6 +1,6 @@
 from PIL import Image
 
-from photo_tools.optimise import MAX_WIDTH, optimise
+from photo_tools.commands.optimise import MAX_WIDTH, optimise
 
 
 def noop_report(level: str, message: str) -> None:
