@@ -1,6 +1,6 @@
 [![CI](https://github.com/aga87/python-photo-tools/actions/workflows/ci.yml/badge.svg)](https://github.com/aga87/python-photo-tools/actions)
 
-# Python Photo Tools
+# Photo Tools CLI
 
 Command-line tools for organising photos by date, managing RAW/JPG pairs, and optimising images.
 
@@ -35,7 +35,14 @@ On Linux, install via your package manager (e.g. `apt install exiftool`).
 ### Using pipx (recommended)
 
 ```shell
-pipx install git+https://github.com/aga87/python-photo-tools.git
+pipx install photo-tools-cli
+```
+Installs the CLI in an isolated environment and makes `photo-tools` available globally, avoiding dependency conflicts.
+
+### Using pip (if pipx not available)
+
+```shell
+pip install photo-tools-cli
 ```
 
 ### Local development
@@ -75,7 +82,7 @@ Flags can be combined:
 photo-tools <command> ... --dry-run --verbose
 ```
 
-### `by-date`
+### Organise by date (`by-date`)
 
 - Organise images into date-based folders (`YYYY-MM-DD`, optional suffix)
 - Files are moved (not copied) into the output directory
@@ -89,7 +96,7 @@ photo-tools by-date <INPUT_DIR> <OUTPUT_DIR> --suffix <SUFFIX>
 ```
 
 
-### `raws`
+### Separate RAW files (`raws`)
 
 - Move RAW images into a `raws/` subfolder within the input directory
 - Non-RAW files are left unchanged
@@ -100,7 +107,7 @@ photo-tools by-date <INPUT_DIR> <OUTPUT_DIR> --suffix <SUFFIX>
 photo-tools raws <INPUT_DIR>
 ```
 
-### `clean-raws`
+### Clean unpaired RAW files (`clean-raws`)
 
 - Move RAW files to `raws-to-delete/` if no matching JPG (same prefix) exists
 - Matching is based on filename prefix (e.g. `abcd.RAF` matches `abcd_edit.jpg`)
@@ -110,7 +117,7 @@ photo-tools raws <INPUT_DIR>
 photo-tools clean-raws <RAW_DIR> <JPG_DIR>
 ```
 
-### `optimise`
+### Optimise images (`optimise`)
 
 - Resize images to a maximum width of `2500px`
 - Choose the highest quality that results in a file size ≤ `500 KB` (never below `70%`)
