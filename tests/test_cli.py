@@ -43,7 +43,7 @@ def test_organise_by_date_command_moves_file(tmp_path, monkeypatch):
 
     monkeypatch.setattr("shutil.which", lambda _: "/usr/bin/fake-exiftool")
     monkeypatch.setattr(
-        "photo_tools.organise_by_date.get_image_date",
+        "photo_tools.commands.organise_by_date.get_image_date",
         lambda _: datetime(2024, 5, 17),
     )
 
@@ -68,7 +68,7 @@ def test_organise_by_date_command_dry_run_does_not_move_file(tmp_path, monkeypat
 
     monkeypatch.setattr("shutil.which", lambda _: "/usr/bin/fake-exiftool")
     monkeypatch.setattr(
-        "photo_tools.organise_by_date.get_image_date",
+        "photo_tools.commands.organise_by_date.get_image_date",
         lambda _: datetime(2024, 5, 17),
     )
 

@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from photo_tools.organise_by_date import organise_by_date
+from photo_tools.commands.organise_by_date import organise_by_date
 
 
 def noop_report(level: str, message: str) -> None:
@@ -17,7 +17,7 @@ def test_dry_run_does_not_move_files(tmp_path, monkeypatch):
     image_file.write_text("fake image content")
 
     monkeypatch.setattr(
-        "photo_tools.organise_by_date.get_image_date",
+        "photo_tools.commands.organise_by_date.get_image_date",
         lambda _: datetime(2024, 5, 17),
     )
 
@@ -42,7 +42,7 @@ def test_moves_file_into_date_folder(tmp_path, monkeypatch):
     image_file.write_text("fake image content")
 
     monkeypatch.setattr(
-        "photo_tools.organise_by_date.get_image_date",
+        "photo_tools.commands.organise_by_date.get_image_date",
         lambda _: datetime(2024, 5, 17),
     )
 
@@ -72,7 +72,7 @@ def test_skips_unsupported_files(tmp_path, monkeypatch):
     unsupported_file.write_text("not an image")
 
     monkeypatch.setattr(
-        "photo_tools.organise_by_date.get_image_date",
+        "photo_tools.commands.organise_by_date.get_image_date",
         lambda _: datetime(2024, 5, 17),
     )
 
@@ -100,7 +100,7 @@ def test_skips_files_with_missing_date_metadata(tmp_path, monkeypatch):
     image_file.write_text("fake image content")
 
     monkeypatch.setattr(
-        "photo_tools.organise_by_date.get_image_date",
+        "photo_tools.commands.organise_by_date.get_image_date",
         lambda _: (_ for _ in ()).throw(ValueError("No DateTimeOriginal")),
     )
 
@@ -133,7 +133,7 @@ def test_moves_files_into_separate_date_folders(tmp_path, monkeypatch):
     }
 
     monkeypatch.setattr(
-        "photo_tools.organise_by_date.get_image_date",
+        "photo_tools.commands.organise_by_date.get_image_date",
         lambda file_path: dates[file_path.name],
     )
 
@@ -165,7 +165,7 @@ def test_skips_file_when_destination_already_exists(tmp_path, monkeypatch):
     existing_file.write_text("existing file")
 
     monkeypatch.setattr(
-        "photo_tools.organise_by_date.get_image_date",
+        "photo_tools.commands.organise_by_date.get_image_date",
         lambda _: datetime(2024, 5, 17),
     )
 

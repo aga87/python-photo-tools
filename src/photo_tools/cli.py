@@ -1,15 +1,15 @@
 import typer
 from dotenv import load_dotenv
 
-from photo_tools.clean_unpaired_raws import clean_unpaired_raws
-from photo_tools.cli_errors import handle_cli_errors
-from photo_tools.cli_reporter import make_reporter
+from photo_tools.cli_support.cli_errors import handle_cli_errors
+from photo_tools.cli_support.cli_reporter import make_reporter
+from photo_tools.commands.clean_unpaired_raws import clean_unpaired_raws
+from photo_tools.commands.optimise import optimise
+from photo_tools.commands.organise_by_date import organise_by_date
+from photo_tools.commands.separate_raws import separate_raws
 from photo_tools.core.dependencies import validate_feature
 from photo_tools.exceptions import MissingDependencyError
 from photo_tools.logging_config import setup_logging
-from photo_tools.optimise import optimise
-from photo_tools.organise_by_date import organise_by_date
-from photo_tools.separate_raws import separate_raws
 
 app = typer.Typer(help="CLI tools for organising and optimising photography workflows.")
 

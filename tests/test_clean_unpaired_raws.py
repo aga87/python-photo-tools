@@ -1,4 +1,4 @@
-from photo_tools.clean_unpaired_raws import clean_unpaired_raws
+from photo_tools.commands.clean_unpaired_raws import clean_unpaired_raws
 
 
 def noop_report(level: str, message: str) -> None:
