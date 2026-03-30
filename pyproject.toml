@@ -3,9 +3,10 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "photo-tools"
-version = "0.1.0"
+name = "photo-tools-cli"
+version = "0.1.1"
 description = "Python CLI tools for photography workflows"
+readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "typer>=0.24,<1.0",
@@ -14,7 +15,13 @@ dependencies = [
 ]
 
 [dependency-groups]
-dev = ["pytest>=9,<10", "ruff>=0.15,<1.0", "mypy>=1.19,<2.0", "build>=1.4,<2.0"]
+dev = [
+    "pytest>=9,<10",
+    "ruff>=0.15,<1.0",
+    "mypy>=1.19,<2.0",
+    "build>=1.4,<2.0",
+    "twine>=6.2,<7.0",
+]
 
 [project.scripts]
 photo-tools = "photo_tools.cli:app"
