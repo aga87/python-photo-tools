@@ -65,17 +65,22 @@ Each command provides detailed usage, including arguments and options:
 photo-tools <command> --help
 ```
 
-### Commands
+**Note: All commands currently process files in the top-level input directory only.**
 
-All commands support a `--dry-run` flag. Use this to safely preview changes before running a command.
+### Global flags
 
-- No files are modified
-- No directories are created
-- Actions are only printed
+All commands support:
 
-**All commands currently process files in the top-level input directory only.**
+- `--dry-run` — preview changes without modifying files
+- `--verbose` / `-v` — show per-file output
 
-#### by-date
+Flags can be combined:
+
+```shell
+photo-tools <command> ... --dry-run --verbose
+```
+
+### `by-date`
 
 - Organise images into date-based folders (`YYYY-MM-DD`, optional suffix)
 - Files are moved (not copied) into the output directory
@@ -87,11 +92,9 @@ photo-tools by-date <INPUT_DIR> <OUTPUT_DIR>
 ```shell
 photo-tools by-date <INPUT_DIR> <OUTPUT_DIR> --suffix <SUFFIX>
 ```
-```shell
-photo-tools by-date <INPUT_DIR> <OUTPUT_DIR> --dry-run
-```
 
-#### raws
+
+### `raws`
 
 - Move RAW images into a `raws/` subfolder within the input directory
 - Non-RAW files are left unchanged
@@ -101,11 +104,8 @@ photo-tools by-date <INPUT_DIR> <OUTPUT_DIR> --dry-run
 ```shell
 photo-tools raws <INPUT_DIR>
 ```
-```shell
-photo-tools raws <INPUT_DIR> --dry-run
-```
 
-#### clean-raws
+### `clean-raws`
 
 - Move RAW files to `raws-to-delete/` if no matching JPG (same prefix) exists
 - Matching is based on filename prefix (e.g. `abcd.RAF` matches `abcd_edit.jpg`)
@@ -115,11 +115,7 @@ photo-tools raws <INPUT_DIR> --dry-run
 photo-tools clean-raws <RAW_DIR> <JPG_DIR>
 ```
 
-```shell
-photo-tools clean-raws <RAW_DIR> <JPG_DIR> --dry-run
-```
-
-#### optimise
+### `optimise`
 
 - Resize images to a maximum width of `2500px`
 - Choose the highest quality that results in a file size ≤ `500 KB` (never below `70%`)
@@ -130,9 +126,6 @@ photo-tools clean-raws <RAW_DIR> <JPG_DIR> --dry-run
 photo-tools optimise <INPUT_DIR>
 ```
 
-```shell
-photo-tools optimise <INPUT_DIR> --dry-run
-```
 
 ## Local Development Setup
 
