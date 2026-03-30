@@ -1,11 +1,15 @@
 import logging
+import os
 
 
-def setup_logging(level: int = logging.DEBUG) -> None:
+def setup_logging() -> None:
+    debug = os.getenv("PHOTO_TOOLS_DEBUG") == "1"
+    level = logging.DEBUG if debug else logging.CRITICAL
+
     logging.basicConfig(
         level=level,
-        format="%(levelname)s:%(name)s:%(message)s",
+        format="%(levelname)s: %(name)s: %(message)s",
+        force=True,  # ensures config is applied even if already set
     )
 
-    # suppress noisy debug logs from Pillow
     logging.getLogger("PIL").setLevel(logging.WARNING)

@@ -1,4 +1,5 @@
 import typer
+from dotenv import load_dotenv
 
 from photo_tools.clean_unpaired_raws import clean_unpaired_raws
 from photo_tools.cli_errors import handle_cli_errors
@@ -12,6 +13,10 @@ from photo_tools.separate_raws import separate_raws
 app = typer.Typer(help="CLI tools for organising and optimising photography workflows.")
 
 
+load_dotenv()
+setup_logging()
+
+
 @app.callback()
 def main() -> None:
     try:
@@ -20,9 +25,6 @@ def main() -> None:
     except MissingDependencyError as e:
         typer.secho(f"Error: {e}", fg=typer.colors.RED, err=True)
         raise typer.Exit(code=1)
-
-
-setup_logging()
 
 
 @app.command("by-date")
