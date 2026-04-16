@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from photo_tools.cli_support.cli_errors import handle_cli_errors
 from photo_tools.cli_support.cli_reporter import make_reporter
 from photo_tools.commands.clean_unpaired_raws import clean_unpaired_raws
+from photo_tools.commands.keep_five_star_raws import keep_five_star_raws
 from photo_tools.commands.optimise import optimise
 from photo_tools.commands.organise_by_date import organise_by_date
 from photo_tools.commands.separate_raws import separate_raws
@@ -123,6 +124,40 @@ def clean_unpaired_raws_cmd(
     ),
 ) -> None:
     clean_unpaired_raws(
+        raw_dir=raw_dir,
+        jpg_dir=jpg_dir,
+        report=make_reporter(verbose),
+        dry_run=dry_run,
+    )
+
+
+@app.command(
+    "keep-5star-raws",
+    help="Move RAW files with matching 5-star JPGs to 'raws-5-star'.",
+)
+@handle_cli_errors
+def keep_five_star_raws_cmd(
+    raw_dir: str = typer.Argument(
+        ...,
+        help="Directory containing RAW files.",
+    ),
+    jpg_dir: str = typer.Argument(
+        ...,
+        help="Directory containing rated JPG files used for matching.",
+    ),
+    dry_run: bool = typer.Option(
+        False,
+        "--dry-run",
+        help="Preview changes without moving files.",
+    ),
+    verbose: bool = typer.Option(
+        False,
+        "--verbose",
+        "-v",
+        help="Show per-file output.",
+    ),
+) -> None:
+    keep_five_star_raws(
         raw_dir=raw_dir,
         jpg_dir=jpg_dir,
         report=make_reporter(verbose),
