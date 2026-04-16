@@ -1,8 +1,11 @@
 import json
+import logging
 import subprocess
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict
+
+logger = logging.getLogger(__name__)
 
 
 def get_exif_metadata(file_path: Path) -> Dict[str, Any]:
@@ -30,3 +33,40 @@ def get_image_date(file_path: Path) -> datetime:
             return datetime.strptime(value, "%Y:%m:%d %H:%M:%S")
 
     raise ValueError("No usable date field found")
+
+
+def parse_rating(metadata: dict[str, str]) -> int | None:
+    rating_keys = (
+        "XMP:Rating",
+        "Rating",
+        "XMP-xmp:Rating",
+    )
+
+    for key in rating_keys:
+        value = metadata.get(key)
+
+        if value in (None, ""):
+            continue
+
+        try:
+            rating = int(str(value).strip())
+
+            logger.debug(
+                "Parsed rating %s from metadata key '%s'",
+                rating,
+                key,
+            )
+
+            return rating
+
+        except ValueError:
+            logger.warning(
+                "Invalid rating value '%s' found in key '%s'",
+                value,
+                key,
+            )
+            return None
+
+    logger.debug("No rating metadata found")
+
+    return None

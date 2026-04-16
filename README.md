@@ -117,6 +117,17 @@ photo-tools raws <INPUT_DIR>
 photo-tools clean-raws <RAW_DIR> <JPG_DIR>
 ```
 
+### Keep RAW files for 5-star JPGs (`keep-5star-raws`)
+
+- Move RAW files to raws-5-star/ if a matching JPG has a 5-star rating
+- Ratings are read from the JPG files, not the RAW files
+- Matching is based on filename prefix (e.g. abcd.RAF matches abcd.jpg or abcd_edit.jpg)
+- Files are moved (not copied), making the operation reversible
+
+```shell
+photo-tools keep-5star-raws <RAW_DIR> <JPG_DIR>
+```
+
 ### Optimise images (`optimise`)
 
 - Resize images to a maximum width of `2500px`
