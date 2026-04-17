@@ -4,6 +4,11 @@
 
 Command-line tools for organising photos by date, managing RAW/JPG pairs, and optimising images.
 
+## Changelog
+
+See [CHANGELOG.md](https://github.com/aga87/python-photo-tools/blob/main/CHANGELOG.md) for release history.
+
+
 ## Supported formats
 
 - **RAW**: `.cr2`, `.cr3`, `.nef`, `.arw`, `.raf`, `.orf`, `.rw2`, `.dng`, `.pef`, `.srw`, `.x3f`
