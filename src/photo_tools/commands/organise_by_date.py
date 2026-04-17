@@ -4,15 +4,10 @@ from collections.abc import Callable
 from pathlib import Path
 
 from photo_tools.core.validation import validate_input_dir
+from photo_tools.image.file_types import is_jpg, is_raw
 from photo_tools.image.metadata import get_image_date
 
 logger = logging.getLogger(__name__)
-
-IMAGE_EXTENSIONS = {
-    ".jpg",
-    ".jpeg",
-    ".raf",
-}
 
 Reporter = Callable[[str, str], None]
 
@@ -37,10 +32,7 @@ def organise_by_date(
     cleaned_suffix = suffix.strip() if suffix and suffix.strip() else None
 
     for file_path in input_path.iterdir():
-        if not file_path.is_file():
-            continue
-
-        if file_path.suffix.lower() not in IMAGE_EXTENSIONS:
+        if not (is_jpg(file_path) or is_raw(file_path)):
             logger.debug("Skipping unsupported file: %s", file_path.name)
             continue
 
@@ -85,7 +77,6 @@ def organise_by_date(
         report("info", f"Moved {file_path.name} -> {target_dir}")
 
     # Summary
-
     if dry_run:
         report("summary", f"Dry run complete: would move {dry_run_count} file(s)")
     else:
