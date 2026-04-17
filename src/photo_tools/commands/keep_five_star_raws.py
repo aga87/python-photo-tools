@@ -7,8 +7,6 @@ from photo_tools.image.raw_utils import get_matching_jpgs, move_raws_by_rule
 
 logger = logging.getLogger(__name__)
 
-RAW_EXTENSIONS = {".raf"}
-JPG_EXTENSIONS = {".jpg", ".jpeg"}
 
 Reporter = Callable[[str, str], None]
 RawMatcher = Callable[[Path, list[Path]], bool]
