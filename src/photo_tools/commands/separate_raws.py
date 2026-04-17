@@ -4,10 +4,10 @@ from collections.abc import Callable
 from pathlib import Path
 
 from photo_tools.core.validation import validate_input_dir
+from photo_tools.image.file_types import is_raw
 
 logger = logging.getLogger(__name__)
 
-RAW_EXTENSIONS = {".raf"}
 OUTPUT_DIR = "raws"
 
 Reporter = Callable[[str, str], None]
@@ -29,10 +29,7 @@ def separate_raws(
     skipped_existing_count = 0
 
     for file_path in input_path.iterdir():
-        if not file_path.is_file():
-            continue
-
-        if file_path.suffix.lower() not in RAW_EXTENSIONS:
+        if not is_raw(file_path):
             logger.debug("Skipping (not RAW): %s", file_path.name)
             continue
 

@@ -5,11 +5,11 @@ from pathlib import Path
 from PIL import Image
 
 from photo_tools.core.validation import validate_input_dir
+from photo_tools.image.file_types import is_jpg
 from photo_tools.image.optimisation import optimise_jpeg, resize_to_max_width
 
 logger = logging.getLogger(__name__)
 
-IMAGE_EXTENSIONS = {".jpg", ".jpeg"}
 
 MAX_WIDTH = 2500
 MAX_FILE_SIZE_BYTES = 500 * 1024
@@ -34,10 +34,7 @@ def optimise(
     failed_count = 0
 
     for file_path in input_path.iterdir():
-        if not file_path.is_file():
-            continue
-
-        if file_path.suffix.lower() not in IMAGE_EXTENSIONS:
+        if not is_jpg(file_path):
             logger.debug("Skipping (not a supported image): %s", file_path.name)
             continue
 

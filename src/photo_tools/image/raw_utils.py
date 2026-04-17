@@ -4,11 +4,10 @@ from collections.abc import Callable
 from pathlib import Path
 
 from photo_tools.core.validation import validate_input_dir
+from photo_tools.image.file_types import is_jpg, is_raw
 
 logger = logging.getLogger(__name__)
 
-RAW_EXTENSIONS = {".raf"}
-JPG_EXTENSIONS = {".jpg", ".jpeg"}
 
 Reporter = Callable[[str, str], None]
 RawMatcher = Callable[[Path, list[Path]], bool]
@@ -34,17 +33,10 @@ def move_raws_by_rule(
     dry_run_count = 0
     skipped_existing_count = 0
 
-    jpg_files = [
-        f
-        for f in jpg_path.iterdir()
-        if f.is_file() and f.suffix.lower() in JPG_EXTENSIONS
-    ]
+    jpg_files = [f for f in jpg_path.iterdir() if is_jpg(f)]
 
     for raw_file in raw_path.iterdir():
-        if not raw_file.is_file():
-            continue
-
-        if raw_file.suffix.lower() not in RAW_EXTENSIONS:
+        if not is_raw(raw_file):
             continue
 
         if not should_move(raw_file, jpg_files):
