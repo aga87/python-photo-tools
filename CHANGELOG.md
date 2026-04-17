@@ -1,5 +1,14 @@
 # Changelog
 
+
+## [0.3.1] - 2026-04-17
+
+### Added
+- CLI `--version` flag
+
+### Documentation
+- Documented `--version` usage in README
+
 ## [0.3.0] - 2026-04-17
 
 ### Added
