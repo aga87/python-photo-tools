@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 
 from photo_tools.cli_support.cli_errors import handle_cli_errors
 from photo_tools.cli_support.cli_reporter import make_reporter
+from photo_tools.cli_support.cli_version import version_callback
 from photo_tools.commands.clean_unpaired_raws import clean_unpaired_raws
 from photo_tools.commands.keep_five_star_raws import keep_five_star_raws
 from photo_tools.commands.optimise import optimise
@@ -20,9 +21,18 @@ setup_logging()
 
 
 @app.callback()
-def main() -> None:
+def main(
+    version: bool = typer.Option(
+        None,
+        "--version",
+        "-V",
+        help="Show version and exit",
+        callback=version_callback,
+        is_eager=True,
+    ),
+) -> None:
     try:
-        # validate dependencies needed globally (if any)
+        # validate dependencies needed globally
         validate_feature("exif")
     except MissingDependencyError as e:
         typer.secho(f"Error: {e}", fg=typer.colors.RED, err=True)

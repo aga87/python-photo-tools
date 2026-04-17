@@ -47,6 +47,12 @@ pipx install photo-tools-cli
 ```
 Installs the CLI in an isolated environment and makes `photo-tools` available globally, avoiding dependency conflicts.
 
+Check installed version:
+
+```shell
+photo-tools --version
+```
+
 ### Using pip (if pipx not available)
 
 ```shell
